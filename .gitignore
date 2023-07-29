@@ -7,6 +7,12 @@
 # BlueJ files
 *.ctxt
 
+# ignore node_modules folder in all subdirectories
+node_modules/
+
+# ignore node_modules folder in inspection-system-frontend directory
+/inspection-system-frontend/node_modules/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
