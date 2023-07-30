@@ -10,6 +10,8 @@
 # ignore node_modules folder in all subdirectories
 node_modules/
 
+/inspection-system-frontend/package-lock.json
+
 # ignore node_modules folder in inspection-system-frontend directory
 /inspection-system-frontend/node_modules/
 
