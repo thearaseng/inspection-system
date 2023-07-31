@@ -1,9 +1,8 @@
 package edu.miu.inspection.service;
 
 import edu.miu.inspection.model.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService {
-
-    User users();
+public interface UserService extends UserDetailsService {
 
 }

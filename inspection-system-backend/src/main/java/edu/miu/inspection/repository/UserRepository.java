@@ -1,13 +1,12 @@
 package edu.miu.inspection.repository;
 
 import edu.miu.inspection.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    public User user() {
-        return new User("111", "John", "Doe");
-    }
+    User findByEmail(String email);
 
 }
