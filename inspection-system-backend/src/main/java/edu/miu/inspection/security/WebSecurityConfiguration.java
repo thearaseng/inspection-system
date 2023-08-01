@@ -19,6 +19,7 @@ public class WebSecurityConfiguration extends ResourceServerConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
+        httpSecurity.headers().frameOptions().disable();
     }
 
 }

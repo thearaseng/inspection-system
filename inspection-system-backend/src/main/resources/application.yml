@@ -1,3 +1,4 @@
+
 security:
   oauth2:
     client:
@@ -10,3 +11,24 @@ security:
       key-store-password: mystorepass
       key-alias: mytestkey
 
+spring:
+  datasource:
+    url: jdbc:h2:mem:mydb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+    hikari:
+      allow-pool-suspension: true
+  jpa:
+    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    org:
+      springframework: INFO
+server:
+  port: 8080
