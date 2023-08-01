@@ -17,7 +17,7 @@ public class WebSecurityConfiguration extends ResourceServerConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/my-public-api/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
     }
 
