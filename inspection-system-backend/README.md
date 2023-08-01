@@ -14,7 +14,7 @@ The users defined in the `import.sql` file are automatically inserted in the dat
 
 Use the `/oauth/token` endpoint. Note that the provided user password is not encrypted. Spring will automatically hash the password with a BCrypt algorithm and compare it with the entry in the database.
 ```sh
-$ curl myClient:myClientSecret@localhost:8080/oauth/token -d grant_type=password -d username=user -d password=password
+$ curl myClient:myClientSecret@localhost:8080/oauth/token -d grant_type=password -d username=john@miu.com -d password=password
 ```
 
 The **myClient:myClientSecret** is your OAuth2 client API key, provided as Basic HTTP headers.
