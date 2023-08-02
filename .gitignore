@@ -12,6 +12,8 @@ node_modules/
 
 /inspection-system-frontend/package-lock.json
 
+.vscode/
+
 # ignore node_modules folder in inspection-system-frontend directory
 /inspection-system-frontend/node_modules/
 
