@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private String phone;
     @NotNull
     private String location;
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -95,6 +96,14 @@ public class User implements UserDetails {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override
