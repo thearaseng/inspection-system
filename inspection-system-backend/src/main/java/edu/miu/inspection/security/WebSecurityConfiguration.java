@@ -18,6 +18,7 @@ public class WebSecurityConfiguration extends ResourceServerConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/h2-console/*").permitAll()
                 .anyRequest().authenticated();
         httpSecurity.headers().frameOptions().disable();
     }
