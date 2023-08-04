@@ -43,14 +43,24 @@ public class CustomResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
         return customResponse;
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(ResponseStatusException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<CustomResponse> handleGenericError(ResponseStatusException ex) {
+    public ResponseEntity<CustomResponse> handleResponseStatusException(ResponseStatusException ex) {
         CustomResponse<Object> customResponse = new CustomResponse<>();
         customResponse.setStatusCode(ex.getStatus().value());
         customResponse.setMessage(ex.getStatus().getReasonPhrase());
         return ResponseEntity.status(ex.getStatus()).body(customResponse);
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<CustomResponse> handleGenericError(Exception ex) {
+        CustomResponse<Object> customResponse = new CustomResponse<>();
+        customResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        customResponse.setMessage("ERROR");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(customResponse);
     }
 
 }
