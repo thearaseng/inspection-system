@@ -1,5 +1,6 @@
 package edu.miu.inspection.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,10 +19,12 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
     @NotNull
+    @JsonIgnore
     private String password;
     @NotNull
     private String authorities;
     @NotNull
+    @JsonIgnore
     private Boolean enabled = false;
     @NotNull
     private String firstName;

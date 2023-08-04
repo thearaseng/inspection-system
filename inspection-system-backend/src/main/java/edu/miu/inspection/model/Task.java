@@ -12,6 +12,8 @@ import java.util.Date;
 @Setter
 public class Task {
 
+    private static final long serialVersionUID = -2338626292552177485L;
+
     @Id
     @GeneratedValue
     private Long id;
