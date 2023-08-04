@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,7 +25,7 @@ public class CustomResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         // If the body is already a CustomResponse (e.g., in case of error responses), return it as is
-        if (body instanceof CustomResponse) {
+        if (body instanceof CustomResponse || body instanceof DefaultOAuth2AccessToken) {
             return body;
         }
 
