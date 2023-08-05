@@ -8,8 +8,6 @@
 # testing
 /coverage
 
-/inspection-system-frontend/package-lock.json
-
 # production
 /build
 
