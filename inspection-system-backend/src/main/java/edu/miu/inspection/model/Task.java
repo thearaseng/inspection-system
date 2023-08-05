@@ -15,7 +15,7 @@ public class Task {
     private static final long serialVersionUID = -2338626292552177485L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
