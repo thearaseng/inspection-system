@@ -14,6 +14,7 @@ public class WebSecurityConfiguration extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .cors().disable()
                 .csrf()
                 .disable()
                 .authorizeRequests()
