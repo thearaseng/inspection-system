@@ -13,6 +13,7 @@ RUN npm install
 COPY . .
 
 # Build the React app
+RUN mv .env.prod .env
 RUN npm run build
 
 # Serve stage
