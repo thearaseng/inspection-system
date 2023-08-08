@@ -27,7 +27,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            docker stop webapp || true
-            docker rm webapp || true
+            docker stop inspection-system-backend || true
+            docker rm inspection-system-backend || true
             docker pull thearaseng/inspection-system-backend:${{ github.sha }}
-            docker run -d --name webapp -p 80:80 thearaseng/inspection-system-backend:${{ github.sha }}
+            docker run -d --name inspection-system-backend -p 8080:8080 thearaseng/inspection-system-backend:${{ github.sha }}
