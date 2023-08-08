@@ -7,8 +7,10 @@ if (token != null) {
     authorization = "Bearer" + token;
 }
 
+const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:8080";
+
 export const api = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: BASE_URL,
     headers: {
         "Content-Type": "application/json",
         "Authorization": authorization,
@@ -16,7 +18,7 @@ export const api = axios.create({
 })
 
 export const authApi = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: BASE_URL,
     headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "Authorization": "Basic bXlDbGllbnQ6bXlDbGllbnRTZWNyZXQ=",
