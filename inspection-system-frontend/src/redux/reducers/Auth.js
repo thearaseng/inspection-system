@@ -29,6 +29,7 @@ const authReducer =  (state = INIT_STATE, action) => {
         }
 
         case USER_TOKEN_SET: {
+            console.log("token: " + action.payload);
             return {
                 ...state,
                 token: action.payload,

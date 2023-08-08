@@ -1,8 +1,13 @@
-import Login from "../Login/Login";
+import Header from "../../components/Header/Header";
+import {Col} from "antd";
 
 function Home() {
     return (
-        <p> Hello</p>
+        <Col>
+            <Header/>
+            <p> Hello</p>
+        </Col>
     );
 }
+
 export default Home;

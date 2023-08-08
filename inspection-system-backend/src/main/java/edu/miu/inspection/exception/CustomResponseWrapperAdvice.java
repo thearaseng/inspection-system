@@ -28,7 +28,7 @@ public class CustomResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
 
-        response.getHeaders().setAccessControlAllowOrigin("http://localhost:3000");
+        response.getHeaders().setAccessControlAllowOrigin("*");
         response.getHeaders().setAccessControlAllowMethods(List.of(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS));
         response.getHeaders().setAccessControlAllowHeaders(List.of("Content-Type", "Accept", "X-Requested-With", "remember-me", "Cache-Control", "access_token"));
 //        response.getHeaders().setAccessControlAllowHeaders(List.of("*"));
