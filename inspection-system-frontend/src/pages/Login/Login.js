@@ -1,10 +1,14 @@
-import {Button, Col, Form, Input, message, Row} from "antd";
-import {useDispatch} from "react-redux";
+import {Button, Col, Divider, Form, Input, message, Row, Typography} from "antd";
+import {useDispatch, useSelector} from "react-redux";
 import {userSignIn} from "../../services/Auth";
-import Cookies from "js-cookie";
+import {useNavigate} from "react-router-dom";
 
-
+const { Link } = Typography;
 function Login(props) {
+    const {token} = useSelector(({auth}) => auth);
+
+    const navigate = useNavigate();
+
     const dispatch = useDispatch();
     const onFinish = (values) => {
         console.log('Success:', values);
@@ -12,31 +16,29 @@ function Login(props) {
     };
 
     const handleResult = (res) => {
-        // if (res === 200) {
-        //     message.success("Login successfully !");
-        //     console.log("login success");
-        //     if (Cookies.get("role") === "admin") {
-        //         props.history.push("/department-config");
-        //         window.location.reload();
-        //     } else {
-        //         props.history.push("/provider");
-        //         window.location.reload();
-        //     }
-        // } else if (res === 1000) {
-        //     message.error("Your account isn't actived ! Please active your account");
-        // } else if (res === 1007) {
-        //     message.error("Incorrect email or password!");
-        // } else if (res === 500) {
-        //     message.error("Server busy ! Please try again !");
-        // } else {
-        //     message.error("Login failed ! Please try again !");
-        //     console.log("login fail");
-        // }
+        console.log(res);
+        if (res === 200) {
+            message.success("Login successfully !").then(r => {
+                navigate("/");
+            });
+
+        } else {
+            message.error("Incorrect email or password!").then(r => {
+            });
+        }
     };
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
+
+    if (token != null) {
+        return (
+            <Row>
+                <Divider>You are logged. Please go to  <Link href="/">HomePage</Link></Divider>
+            </Row>
+        );
+    }
 
 
     return (
@@ -47,8 +49,8 @@ function Login(props) {
                     style={{
                         marginTop: "100px"
                     }}
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 16 }}
+                    labelCol={{span: 8}}
+                    wrapperCol={{span: 16}}
                     name="basic"
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
