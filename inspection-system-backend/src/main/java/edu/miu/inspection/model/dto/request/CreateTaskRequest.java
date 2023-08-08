@@ -10,7 +10,7 @@ import java.util.Date;
 public class CreateTaskRequest {
 
     private Long inspectorId;
-    private Long formId;
+    private String formType;
     private Date dueDate;
 
 }

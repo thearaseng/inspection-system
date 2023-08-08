@@ -9,4 +9,5 @@ public interface TaskService {
     Task save(Task task);
     Page<Task> getTasksWithPagination(Pageable pageable);
 
+    Task findById(Long id);
 }

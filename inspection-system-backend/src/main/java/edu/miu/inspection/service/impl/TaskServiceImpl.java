@@ -19,8 +19,14 @@ public class TaskServiceImpl implements TaskService {
         return this.taskRepository.save(task);
     }
 
+    @Override
     public Page<Task> getTasksWithPagination(Pageable pageable) {
         return taskRepository.findAll(pageable);
+    }
+
+    @Override
+    public Task findById(Long id) {
+        return this.taskRepository.findById(id).orElse(null);
     }
 
 }

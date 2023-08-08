@@ -1,6 +1,7 @@
 package edu.miu.inspection.exception;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.util.List;
+
 @RestControllerAdvice
 public class CustomResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
 
@@ -24,7 +27,16 @@ public class CustomResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+
+        response.getHeaders().setAccessControlAllowOrigin("http://localhost:3000");
+        response.getHeaders().setAccessControlAllowMethods(List.of(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS));
+        response.getHeaders().setAccessControlAllowHeaders(List.of("Content-Type", "Accept", "X-Requested-With", "remember-me", "Cache-Control", "access_token"));
+//        response.getHeaders().setAccessControlAllowHeaders(List.of("*"));
+        response.getHeaders().setAccessControlMaxAge(3600);
+        response.getHeaders().setAccessControlAllowCredentials(true);
+
         // If the body is already a CustomResponse (e.g., in case of error responses), return it as is
+
         if (body instanceof CustomResponse || body instanceof DefaultOAuth2AccessToken) {
             return body;
         }

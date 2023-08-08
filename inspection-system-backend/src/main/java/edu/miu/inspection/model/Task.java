@@ -22,7 +22,7 @@ public class Task {
     @JoinColumn(name = "assigned_to")
     private User inspector;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "form_id")
     private Form form;
 
@@ -31,5 +31,8 @@ public class Task {
 
     @NotNull
     private Date dueDate;
+
+    @NotNull
+    private String formType;
 
 }
