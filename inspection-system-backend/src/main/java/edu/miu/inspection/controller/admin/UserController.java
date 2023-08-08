@@ -7,6 +7,7 @@ import edu.miu.inspection.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,6 +16,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/api/admin/users/{email}")
     public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
@@ -33,15 +36,14 @@ public class UserController {
 
         User user = new User();
         user.setEmail(userRequest.getEmail());
-        user.setPassword("TESTING");
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());
         user.setPhone(userRequest.getPhone());
         user.setLocation(userRequest.getLocation());
-        user.setAuthorities("ROLE_INSPECTOR");
+        user.setAuthorities(String.join(",", userRequest.getAuthorities()));
         user.setEnabled(true);
         user.setDeleted(false);
-
 
         this.userService.save(user);
 
