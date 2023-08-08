@@ -10,6 +10,29 @@ export const setInitUrl = (url) => {
     };
 };
 
+export const userSignOut = (callback = (res) => {
+
+}) => {
+    return (dispatch) => {
+        try {
+            dispatch({type: FETCH_START});
+            Cookies.remove("token");
+            Cookies.remove("role");
+            Cookies.remove("refresh_token");
+            Cookies.remove("email");
+            Cookies.remove("decoded_token");
+            dispatch({type: FETCH_SUCCESS});
+            dispatch({type: USER_TOKEN_SET, payload: null});
+            callback(200)
+        } catch (e) {
+            dispatch({type: FETCH_ERROR, payload: null});
+            callback(404)
+        }
+
+
+    }
+}
+
 export const userSignIn = (
     {username, password},
     callback = (res) => {
