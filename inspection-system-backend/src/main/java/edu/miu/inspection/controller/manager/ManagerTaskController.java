@@ -39,4 +39,24 @@ public class ManagerTaskController {
         return ResponseEntity.ok(createdTask);
     }
 
+    @GetMapping("/api/manager/tasks")
+    public ResponseEntity<PageableResponse<Task>> getTasksWithPagination(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Task> taskPage = taskService.findAllByManager(this.userService.getCurrentUser(), pageRequest);
+
+        PageableResponse<Task> response = new PageableResponse<>();
+        response.setContent(taskPage.getContent());
+        response.setTotalElements(taskPage.getTotalElements());
+        response.setTotalPages(taskPage.getTotalPages());
+        response.setNumber(page);
+        response.setSize(size);
+        response.setNumberOfElements(taskPage.getNumberOfElements());
+
+        return ResponseEntity.ok(response);
+
+    }
+
 }

@@ -43,4 +43,6 @@ public class Task {
     @NotNull
     private String formType;
 
+    private boolean deleted;
+
 }

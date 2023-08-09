@@ -1,6 +1,7 @@
 package edu.miu.inspection.service.impl;
 
 import edu.miu.inspection.model.Task;
+import edu.miu.inspection.model.User;
 import edu.miu.inspection.repository.TaskRepository;
 import edu.miu.inspection.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Page<Task> getTasksWithPagination(Pageable pageable) {
         return taskRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Task> findAllByManager(User manager, Pageable pageable) {
+        return taskRepository.findAllByManager(manager, pageable);
     }
 
     @Override
