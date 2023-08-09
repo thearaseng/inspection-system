@@ -42,3 +42,33 @@ export const createUser = (
             });
     };
 };
+
+export const getUsers = (
+    {page, pageSize},
+    callback = (code, response) => {}
+) => {
+    // console.log(page, page_size);
+    return (dispatch) => {
+        dispatch({ type: FETCH_START });
+        const token = Cookies.get("token");
+        dispatch({type: FETCH_START});
+        api
+            .get(
+                `api/admin/users?page=${page}&size=${pageSize}`,
+                {headers:  {
+                        Authorization: `Bearer ${token}`,
+                    },})
+
+            .then((res) => {
+                if (res.status === 200) {
+                        callback(res.status, res.data.data);
+                } else callback(404);
+            })
+            .catch(function (error) {
+                dispatch({type: FETCH_ERROR, payload: error});
+                console.log("Error****:", error);
+                callback(404);
+            });
+    };
+};
+
