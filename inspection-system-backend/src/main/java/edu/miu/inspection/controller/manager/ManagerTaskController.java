@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class TaskController {
+public class ManagerTaskController {
 
     @Autowired
     private TaskService taskService;
@@ -25,36 +25,18 @@ public class TaskController {
     public ResponseEntity<Task> save(@RequestBody CreateTaskRequest taskRequest) {
 
         User inspector = userService.findById(taskRequest.getInspectorId());
+        User manager = userService.getCurrentUser();
 
         Task task = new Task();
         task.setInspector(inspector);
         task.setFormType(taskRequest.getFormType());
         task.setStatus(TaskStatus.CREATED.getValue());
         task.setDueDate(taskRequest.getDueDate());
+        task.setManager(manager);
 
         Task createdTask = taskService.save(task);
 
         return ResponseEntity.ok(createdTask);
-    }
-
-    @GetMapping("/api/manager/inspectors/{inspectorId}/tasks")
-    public ResponseEntity<PageableResponse<Task>> getTasksWithPagination(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Task> taskPage = taskService.getTasksWithPagination(pageRequest);
-
-        PageableResponse<Task> response = new PageableResponse<>();
-        response.setContent(taskPage.getContent());
-        response.setTotalElements(taskPage.getTotalElements());
-        response.setTotalPages(taskPage.getTotalPages());
-        response.setNumber(page);
-        response.setSize(size);
-        response.setNumberOfElements(taskPage.getNumberOfElements());
-
-        return ResponseEntity.ok(response);
-
     }
 
 }
