@@ -12,5 +12,7 @@ public interface TaskService {
 
     Page<Task> findAllByManager(User manager, Pageable pageable);
 
+    Page<Task> findAllByInspector(User inspector, Pageable pageable);
+
     Task findById(Long id);
 }

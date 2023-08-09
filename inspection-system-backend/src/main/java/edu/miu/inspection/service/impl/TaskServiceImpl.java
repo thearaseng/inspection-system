@@ -27,7 +27,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<Task> findAllByManager(User manager, Pageable pageable) {
-        return taskRepository.findAllByManager(manager, pageable);
+        return taskRepository.findAllByManagerAndDeletedFalse(manager, pageable);
+    }
+
+    @Override
+    public Page<Task> findAllByInspector(User inspector, Pageable pageable) {
+        return taskRepository.findAllByInspectorAndDeletedFalse(inspector, pageable);
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.util.List;
 public interface TaskRepository extends PagingAndSortingRepository<Task, Long> {
 
     Task save(Task task);
-    Page<Task> findAllByManager(User manager, Pageable pageable);
+    Page<Task> findAllByManagerAndDeletedFalse(User manager, Pageable pageable);
+    Page<Task> findAllByInspectorAndDeletedFalse(User manager, Pageable pageable);
 
 }
