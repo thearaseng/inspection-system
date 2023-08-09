@@ -16,4 +16,12 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
     @Query("SELECT e FROM User e WHERE e.deleted = false")
     Page<User> findAllNotDeleted(Pageable pageable);
 
+    @Query(value = "SELECT * FROM user i " +
+            "WHERE i.deleted = false " +
+            "AND i.id NOT IN (SELECT hi.inspector_id FROM hired_inspectors hi WHERE manager_id = :managerId)" +
+            "AND i.id <> :managerId " +
+            "AND i.authorities like '%ROLE_INSPECTOR%'",
+            nativeQuery = true)
+    Page<User> findAvailableInspectorsNotHiredByManager(Long managerId, Pageable pageable);
+
 }

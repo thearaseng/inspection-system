@@ -36,6 +36,15 @@ public class User implements UserDetails {
     private String phone;
     @NotNull
     private String location;
+
+    @ManyToMany
+    @JoinTable(
+            name = "hired_inspectors",
+            joinColumns = @JoinColumn(name = "manager_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "inspector_id", referencedColumnName = "id")
+    )
+    private List<User> inspectors;
+
     private boolean deleted;
 
     public Long getId() {
@@ -118,6 +127,14 @@ public class User implements UserDetails {
 
     public List<String> getRoles() {
         return getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+    }
+
+    public List<User> getInspectors() {
+        return inspectors;
+    }
+
+    public void setInspectors(List<User> inspectors) {
+        this.inspectors = inspectors;
     }
 
     @Override

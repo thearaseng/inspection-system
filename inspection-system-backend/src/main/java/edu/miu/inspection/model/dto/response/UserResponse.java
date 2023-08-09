@@ -18,7 +18,8 @@ public class UserResponse {
     private String lastName;
     private String phone;
     private String location;
-    private List<String> authorities;
+    private List<String> roles;
+    private List<User> inspectors;
 
     public UserResponse() {
     }
@@ -30,7 +31,8 @@ public class UserResponse {
         this.lastName = user.getLastName();
         this.phone = user.getPhone();
         this.location = user.getLocation();
-        this.authorities = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        this.roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        this.inspectors = user.getInspectors();
     }
 
 }

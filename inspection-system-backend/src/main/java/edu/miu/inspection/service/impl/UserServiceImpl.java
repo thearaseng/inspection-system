@@ -6,6 +6,8 @@ import edu.miu.inspection.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return this.findByEmail(
+                String.valueOf(authentication.getPrincipal())
+        );
+    }
+
+    @Override
     public User findByEmail(String email) {
         return this.userRepository.findByEmailAndDeletedFalse(email);
     }
@@ -43,6 +53,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> getUsersWithPagination(Pageable pageable) {
         return userRepository.findAllNotDeleted(pageable);
+    }
+
+    @Override
+    public Page<User> getAvailableInspectorsNotHiredByManager(Long managerId, Pageable pageable) {
+        return userRepository.findAvailableInspectorsNotHiredByManager(managerId, pageable);
     }
 
 }

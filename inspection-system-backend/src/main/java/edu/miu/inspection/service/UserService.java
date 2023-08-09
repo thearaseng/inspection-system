@@ -6,9 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
+    User getCurrentUser();
+
     User findByEmail(String email);
     User findById(Long id);
     User save(User user);
 
     Page<User> getUsersWithPagination(Pageable pageable);
+
+    Page<User> getAvailableInspectorsNotHiredByManager(Long managerId, Pageable pageable);
 }

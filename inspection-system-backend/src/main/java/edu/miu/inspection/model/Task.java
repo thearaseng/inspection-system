@@ -28,6 +28,10 @@ public class Task {
     @JoinColumn(name = "form_id")
     private Form form;
 
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private User manager;
+
     @NotNull
     private String status;
 
