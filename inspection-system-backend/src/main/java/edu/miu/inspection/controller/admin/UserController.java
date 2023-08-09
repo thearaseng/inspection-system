@@ -1,10 +1,14 @@
 package edu.miu.inspection.controller.admin;
 
+import edu.miu.inspection.model.Task;
 import edu.miu.inspection.model.User;
 import edu.miu.inspection.model.dto.request.CreateUserRequest;
+import edu.miu.inspection.model.dto.response.PageableResponse;
 import edu.miu.inspection.model.dto.response.UserResponse;
 import edu.miu.inspection.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,6 +52,26 @@ public class UserController {
         this.userService.save(user);
 
         return ResponseEntity.ok(new UserResponse(user));
+    }
+
+    @GetMapping("/api/admin/users")
+    public ResponseEntity<PageableResponse<User>> getUsersWithPagination(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<User> taskPage = this.userService.getUsersWithPagination(pageRequest);
+
+        PageableResponse<User> response = new PageableResponse<>();
+        response.setContent(taskPage.getContent());
+        response.setTotalElements(taskPage.getTotalElements());
+        response.setTotalPages(taskPage.getTotalPages());
+        response.setNumber(page);
+        response.setSize(size);
+        response.setNumberOfElements(taskPage.getNumberOfElements());
+
+        return ResponseEntity.ok(response);
+
     }
 
 }

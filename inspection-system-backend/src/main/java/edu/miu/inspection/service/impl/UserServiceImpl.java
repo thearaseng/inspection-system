@@ -4,6 +4,8 @@ import edu.miu.inspection.model.User;
 import edu.miu.inspection.repository.UserRepository;
 import edu.miu.inspection.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -37,4 +39,10 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         return this.userRepository.save(user);
     }
+
+    @Override
+    public Page<User> getUsersWithPagination(Pageable pageable) {
+        return userRepository.findAllNotDeleted(pageable);
+    }
+
 }
