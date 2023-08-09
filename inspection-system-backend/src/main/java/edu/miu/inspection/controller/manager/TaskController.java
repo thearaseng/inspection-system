@@ -1,4 +1,4 @@
-package edu.miu.inspection.controller.admin;
+package edu.miu.inspection.controller.manager;
 
 import edu.miu.inspection.model.Task;
 import edu.miu.inspection.model.User;
@@ -21,7 +21,7 @@ public class TaskController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/api/admin/tasks")
+    @PostMapping("/api/manager/tasks")
     public ResponseEntity<Task> save(@RequestBody CreateTaskRequest taskRequest) {
 
         User inspector = userService.findById(taskRequest.getInspectorId());
@@ -37,7 +37,7 @@ public class TaskController {
         return ResponseEntity.ok(createdTask);
     }
 
-    @GetMapping("/api/admin/insector/{inspectorId}/tasks")
+    @GetMapping("/api/manager/inspectors/{inspectorId}/tasks")
     public ResponseEntity<PageableResponse<Task>> getTasksWithPagination(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {

@@ -1,5 +1,7 @@
 package edu.miu.inspection.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.miu.inspection.serialization.CustomDateSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +32,8 @@ public class Task {
     private String status;
 
     @NotNull
+    @JsonSerialize(using = CustomDateSerializer.class)
+
     private Date dueDate;
 
     @NotNull
