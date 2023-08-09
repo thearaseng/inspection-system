@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -56,8 +58,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> getAvailableInspectorsNotHiredByManager(Long managerId, Pageable pageable) {
-        return userRepository.findAvailableInspectorsNotHiredByManager(managerId, pageable);
+    public Page<User> getAvailableInspectorsNotHiredByManager(Long managerId, List<Long> inspectorIds, Pageable pageable) {
+        return userRepository.findAvailableInspectorsNotHiredByManager(managerId, inspectorIds, pageable);
     }
 
 }
