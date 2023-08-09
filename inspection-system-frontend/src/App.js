@@ -5,7 +5,6 @@ import store from "./redux/store";
 import MainApp from "./pages/Main/MainApp";
 
 function App() {
-
     return (
         <Provider store={store}>
             <BrowserRouter>

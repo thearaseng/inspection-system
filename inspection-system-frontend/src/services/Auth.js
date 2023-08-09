@@ -1,6 +1,13 @@
-import {FETCH_ERROR, FETCH_START, FETCH_SUCCESS, INIT_URL, USER_TOKEN_SET} from "../constants/ActionTypes";
+import {
+    FETCH_ERROR,
+    FETCH_START,
+    FETCH_SUCCESS,
+    INIT_URL,
+    USER_ROLE_SET,
+    USER_TOKEN_SET
+} from "../constants/ActionTypes";
 import Cookies from 'js-cookie';
-import {authApi} from "../util/Api";
+import {api, authApi} from "../util/Api";
 import * as jose from 'jose'
 
 export const setInitUrl = (url) => {
@@ -64,10 +71,11 @@ export const userSignIn = (
                     Cookies.set("role", JSON.stringify(decoded_token.authorities));
                     Cookies.set("email", JSON.stringify(decoded_token.user_name));
 
-                    authApi.defaults.headers.common["Authorization"] = "Bearer" + res.data.access_token;
+                    api.defaults.headers.common["Authorization"] = "Bearer " + res.data.access_token;
 
                     dispatch({type: FETCH_SUCCESS});
                     dispatch({type: USER_TOKEN_SET, payload: res.data.access_token});
+                    dispatch({type: USER_ROLE_SET, payload: JSON.stringify(decoded_token.authorities)});
                     callback(res.status);
                 } else {
                     callback(res.status);
