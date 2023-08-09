@@ -4,8 +4,6 @@
 name: Build React App
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 

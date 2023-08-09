@@ -1,6 +1,6 @@
 import React from "react";
 import "./Header.css";
-import {Navbar, Container, Nav} from "react-bootstrap";
+import {Navbar, Container} from "react-bootstrap";
 import {Button, message} from "antd";
 import {userSignOut} from "../../services/Auth";
 import {useDispatch} from "react-redux";
@@ -27,11 +27,7 @@ export default function Header() {
         <div className="header">
             <Navbar bg="dark" data-bs-theme="dark">
                 <Container>
-                    <Navbar.Brand>Inspection</Navbar.Brand>
-                    <Nav className="me-auto">
-                        <Nav.Link href="#home">Home</Nav.Link>
-                        <Nav.Link href="#features">Features</Nav.Link>
-                    </Nav>
+                    <Navbar.Brand href="/">Inspection</Navbar.Brand>
 
                     <Button className="d-flex" variant="outline-success" onClick={onFinish}>Logout</Button>
                 </Container>
