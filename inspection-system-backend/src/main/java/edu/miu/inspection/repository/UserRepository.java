@@ -27,4 +27,12 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
             nativeQuery = false)
     Page<User> findAvailableInspectorsNotHiredByManager(@Param("managerId") Long managerId, @Param("inspectorIds") List<Long> inspectorIds, Pageable pageable);
 
+    @Query(value = "SELECT i FROM User i " +
+            "WHERE i.deleted = false " +
+            "AND i.id IN (:inspectorIds) " +
+            "AND i.id <> :managerId " +
+            "AND i.authorities like '%ROLE_INSPECTOR%'",
+            nativeQuery = false)
+    Page<User> findInspectorsHiredByManager(@Param("managerId") Long managerId, @Param("inspectorIds") List<Long> inspectorIds, Pageable pageable);
+
 }

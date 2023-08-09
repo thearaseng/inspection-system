@@ -29,7 +29,7 @@ public class InspectorController {
         PageRequest pageRequest = PageRequest.of(page, size);
         User manager = this.userService.getCurrentUser();
         List<Long> inspectorIds = manager.getInspectors().stream().map(User::getId).toList();
-        Page<User> userPage = this.userService.getAvailableInspectorsNotHiredByManager(manager.getId(), inspectorIds, pageRequest);
+        Page<User> userPage = this.userService.getInspectorsHiredByManager(manager.getId(), inspectorIds, pageRequest);
 
         PageableResponse<User> response = new PageableResponse<>();
         response.setContent(userPage.getContent());

@@ -17,4 +17,6 @@ public interface UserService extends UserDetailsService {
     Page<User> getUsersWithPagination(Pageable pageable);
 
     Page<User> getAvailableInspectorsNotHiredByManager(Long managerId, List<Long> inspectorIds, Pageable pageable);
+
+    Page<User> getInspectorsHiredByManager(Long managerId, List<Long> inspectorIds, Pageable pageable);
 }
