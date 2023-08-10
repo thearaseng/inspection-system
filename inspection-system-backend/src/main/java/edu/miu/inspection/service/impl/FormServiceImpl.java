@@ -1,5 +1,7 @@
 package edu.miu.inspection.service.impl;
 
+import edu.miu.inspection.exception.GenericException;
+import edu.miu.inspection.exception.NotFoundException;
 import edu.miu.inspection.model.Form;
 import edu.miu.inspection.model.HotelForm;
 import edu.miu.inspection.model.RestaurantForm;
@@ -39,12 +41,17 @@ public class FormServiceImpl implements FormService {
         Long taskId = Long.valueOf(record.get("taskId").toString());
         boolean isSubmitted = record.get("summited") != null && (Boolean) record.get("summited");
         Task task = this.taskService.findById(taskId);
+
+        if (TaskStatus.DONE.getValue().equals(task.getStatus())) {
+            throw new GenericException(String.format("Task with id '%s' was already '%s'", task.getId(), task.getStatus()));
+        }
+
         Form form;
 
         if (FormType.HOTEL.getValue().equals(formType)) {
-            form = this.saveHotelForm(record);
+            form = this.saveHotelForm(task.getForm(), record);
         } else if (FormType.RESTAURANT.getValue().equals(formType)) {
-            form = this.saveRestaurantForm(record);
+            form = this.saveRestaurantForm(task.getForm(), record);
         } else {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         }
@@ -56,13 +63,12 @@ public class FormServiceImpl implements FormService {
 
     }
 
-    private Form saveHotelForm(HashMap<String, Object> record) {
+    private Form saveHotelForm(Form existingForm, HashMap<String, Object> record) {
 
-        Long formId = (Long) record.get("formId");
         HotelForm form;
 
-        if (formId != null) {
-            form = this.hotelFormRepository.getById(formId);
+        if (existingForm != null) {
+            form = this.hotelFormRepository.getById(existingForm.getId());
         } else {
             form = new HotelForm();
         }
@@ -77,13 +83,12 @@ public class FormServiceImpl implements FormService {
         return form;
     }
 
-    private Form saveRestaurantForm(HashMap<String, Object> record) {
+    private Form saveRestaurantForm(Form existingForm, HashMap<String, Object> record) {
 
-        Long formId = (Long) record.get("formId");
         RestaurantForm form;
 
-        if (formId != null) {
-            form = this.restaurantFormRepository.getById(formId);
+        if (existingForm != null) {
+            form = this.restaurantFormRepository.getById(existingForm.getId());
         } else {
             form = new RestaurantForm();
         }

@@ -76,7 +76,7 @@ public class CustomResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
     public ResponseEntity<CustomResponse> handleGenericError(Exception ex) {
         CustomResponse<Object> customResponse = new CustomResponse<>();
         customResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        customResponse.setMessage("ERROR");
+        customResponse.setMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(customResponse);
     }
 
