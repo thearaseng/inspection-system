@@ -72,7 +72,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAvailableInspectorsNotHiredByManager(managerId, inspectorIds, pageable);
     }
 
-
     @Override
     public Page<User> getInspectorsHiredByManager(Long managerId, List<Long> inspectorIds, Pageable pageable) {
         return userRepository.findInspectorsHiredByManager(managerId, inspectorIds, pageable);

@@ -27,7 +27,7 @@ public class Task {
     @JoinColumn(name = "assigned_to")
     private User inspector;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "form_id")
     private Form form;
 
@@ -43,8 +43,9 @@ public class Task {
 
     @NotNull
     @JsonSerialize(using = CustomDateSerializer.class)
-
     private Date dueDate;
+
+    private String inspectionResult;
 
     @NotNull
     private String formType;

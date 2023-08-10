@@ -1,5 +1,6 @@
 package edu.miu.inspection.service.impl;
 
+import edu.miu.inspection.exception.NotFoundException;
 import edu.miu.inspection.model.Task;
 import edu.miu.inspection.model.User;
 import edu.miu.inspection.repository.TaskRepository;
@@ -37,7 +38,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task findById(Long id) {
-        return this.taskRepository.findById(id).orElse(null);
+        Task task = this.taskRepository.findByIdAndDeletedFalse(id);
+
+        if (task == null) {
+            throw new NotFoundException(String.format("No task found with id '%s'", id));
+        }
+
+        return task;
     }
 
 }

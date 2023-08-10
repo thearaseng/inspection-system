@@ -36,18 +36,30 @@ public class FormServiceImpl implements FormService {
         String formType = (String) record.get("formType");
         Long taskId = Long.valueOf(record.get("taskId").toString());
         Task task = this.taskService.findById(taskId);
+        Form form = null;
 
         if (FormType.HOTEL.getValue().equals(formType)) {
-
-            HotelForm form = new HotelForm();
-            form.setNumberOfRoom((Integer) record.get("numberOfRoom"));
-            form = this.hotelFormRepository.save(form);
-            task.setForm(form);
-            taskService.save(task);
-            return form;
+            form = this.saveHotelForm(record);
+        } else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         }
 
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+        task.setForm(form);
+        taskService.save(task);
+        return form;
+
+    }
+
+    private Form saveHotelForm(HashMap<String, Object> record) {
+        HotelForm form = new HotelForm();
+        form.setHotelName            ((String)  record.get("hotelName"              ));
+        form.setNumberOfRooms        ((Integer) record.get("numberOfEmployees"      ));
+        form.setNumberOfEmployees    ((Integer) record.get("numberOfEmployees"      ));
+        form.setCleanlinessScore     ((Integer) record.get("cleanlinessScore"       ));
+        form.setFireSafetyCompliance ((Integer) record.get("fireSafetyCompliance"   ));
+        form.setRoomServiceQuality   ((Integer) record.get("roomServiceQuality"     ));
+        form = this.hotelFormRepository.save(form);
+        return form;
     }
 
 }

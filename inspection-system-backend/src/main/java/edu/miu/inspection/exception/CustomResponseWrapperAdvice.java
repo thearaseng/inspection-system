@@ -57,10 +57,13 @@ public class CustomResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
         return ResponseEntity.status(ex.getStatus()).body(customResponse);
     }
 
-    @ExceptionHandler(UsernameNotFoundException.class)
+    @ExceptionHandler(value = {
+            UsernameNotFoundException.class,
+            NotFoundException.class
+    })
     @ResponseBody
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<CustomResponse> handleUsernameNotFoundException(UsernameNotFoundException ex) {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<CustomResponse> handleUsernameNotFoundException(RuntimeException ex) {
         CustomResponse<Object> customResponse = new CustomResponse<>();
         customResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
         customResponse.setMessage(ex.getMessage());
