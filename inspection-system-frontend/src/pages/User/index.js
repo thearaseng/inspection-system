@@ -2,17 +2,22 @@ import React, {useEffect, useState} from "react";
 import {Button, Col, Form, message, Modal, Row, Space, Table, Tag} from "antd";
 import Header from "../../components/Header/Header";
 import CreateUser from "./components/CreateUser";
-import {PlusCircleOutlined} from "@ant-design/icons";
+import {DeleteOutlined, EditOutlined, PlusCircleOutlined} from "@ant-design/icons";
 import {connect} from "react-redux";
-import {getUsers} from "../../services/User";
+import {deleteUser, getUsers} from "../../services/User";
+import EditUser from "./components/EditUser";
 
 const mapStateToProps = () => ({});
 const confirm = Modal.confirm;
 const User = (props)=> {
     const [isAdd, setIsAdd] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const [submitUpdate, setSubmitUpdate] = useState(false);
     const [submitAdd, setSubmitAdd] = useState(false);
     const [addForm] = Form.useForm();
+    const [editForm] = Form.useForm();
     const [dataSource, setDataSource] = useState([]);
+    const [selectedObj, setSelectedObj] = useState({});
     const [tableParams, setTableParams] = useState({
         pagination: {
             current: 1,
@@ -80,29 +85,21 @@ const User = (props)=> {
                     <Space size="large" style={{ alignItems: "center" }}>
               <span className="gx-link" onClick={() => confirmDelete(record)}>
                 <Button
-                    style={{
-                        width: "80px",
-                        height: "35px",
-                        margin: "auto",
-                    }}
-                    type = "danger"
-                >
-                  Delete
-                </Button>
+                    type = "primary"
+                    danger
+                    icon={<DeleteOutlined/>}
+                />
               </span>
                     </Space>
                     <Space size="large" style={{ alignItems: "center" }}>
-              <span className="gx-link" onClick={() => {}}>
+              <span className="gx-link" onClick={() => {
+                  setSelectedObj(record);
+                  setIsEdit(true);
+              }}>
                 <Button
-                    style={{
-                        width: "80px",
-                        height: "35px",
-                        margin: "auto",
-                    }}
                     type = "primary"
-                >
-                  Edit
-                </Button>
+                    icon = {<EditOutlined/>}
+                />
               </span>
                     </Space>
                 </Space>
@@ -111,12 +108,14 @@ const User = (props)=> {
     ];
 
     const onClose = () => {
-        if (submitAdd === true) {
+        if (submitAdd || submitUpdate) {
             fetchUsers();
         }
         addForm.resetFields();
         setSubmitAdd(false);
+        setSubmitUpdate(false);
         setIsAdd(false);
+        setIsEdit(false);
     };
 
     const fetchUsers = () =>  props.getUsers(
@@ -163,13 +162,11 @@ const User = (props)=> {
             title: "Do you want to delete this user ?",
             content: "If you agree, please click OK ",
             onOk() {
-                // props.deleteDepartment(record._id, (code) => {
-                //     if (code === 200) {
-                //         setIsFetch(true);
-                //         onClose();
-                //         message.success("Delete App Successfully !");
-                //     } else message.error("Error when deleting app !");
-                // });
+                props.deleteUser(record.id, (code) => {
+                    if (code === 200) {
+                        message.success("Delete App Successfully !").then(fetchUsers());
+                    } else message.error("Error when deleting app !");
+                });
                 onClose();
             },
             onCancel() {
@@ -183,6 +180,16 @@ const User = (props)=> {
             await addForm.validateFields(); // Validate form fields
             // All fields are valid, so you can proceed with submitting
             setSubmitAdd(true);
+        } catch (error) {
+            // Validation failed
+        }
+    };
+
+    const handleOkEdit = async () => {
+        try {
+            await editForm.validateFields(); // Validate form fields
+            // All fields are valid, so you can proceed with submitting
+            setSubmitUpdate(true);
         } catch (error) {
             // Validation failed
         }
@@ -281,6 +288,25 @@ const User = (props)=> {
                             />
                         </Modal>
                     )}
+
+                    {isEdit && (
+                        <Modal
+                            maskClosable={false}
+                            title="Edit user"
+                            width={720}
+                            wrapClassName="vertical-center-modal"
+                            open={isEdit}
+                            onOk={() => handleOkEdit(true)}
+                            onCancel={() => setIsEdit(false)}
+                        >
+                            <EditUser
+                                selectedObj={selectedObj}
+                                submitUpdate={submitUpdate}
+                                onClose={onClose}
+                                form={editForm}
+                            />
+                        </Modal>
+                    )}
                 </div>
             </div>
 
@@ -290,5 +316,6 @@ const User = (props)=> {
 }
 
 export default connect(mapStateToProps, {
-    getUsers
+    getUsers,
+    deleteUser
 })(User);
