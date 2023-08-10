@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RestaurantFormRepository extends PagingAndSortingRepository<RestaurantForm, Long> {
-
+    RestaurantForm getById(Long id);
 }
