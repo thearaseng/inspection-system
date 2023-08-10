@@ -15,18 +15,22 @@ const CreateUser = (props) => {
         setDomainInfo(newFields);
     };
 
+
+
     const create = useCallback(() => {
         const handleAdd = (res) => {
             if (res === 200) {
-                message.success("Add user information successfully!").then(r => props.onClose());
+                message.success("Add user information successfully!");
             } else {
-                message.error("Error when adding user information !").then(r => props.onClose());
+                message.error("Error when adding user information !");
             }
+            props.onClose();
         };
         if (props.submitAdd === true) {
             props.createUser(domainInfo, (res) => handleAdd(res));
         }
-    },[ domainInfo, props]);
+        // eslint-disable-next-line
+    },[props.submitAdd]);
 
 
 

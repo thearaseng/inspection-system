@@ -1,7 +1,8 @@
-import {Button, Col, Divider, Form, Input, message, Row, Typography} from "antd";
+import {Button, Col, Form, Input, message, Row, Typography} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {userSignIn} from "../../services/Auth";
 import {useNavigate} from "react-router-dom";
+import './Login.css'
 
 const { Link } = Typography;
 function Login(props) {
@@ -34,9 +35,13 @@ function Login(props) {
 
     if (token != null) {
         return (
-            <Row>
-                <Divider>You are logged. Please go to  <Link href="/">HomePage</Link></Divider>
-            </Row>
+            <div className="center-container">
+                <Row justify="center" align="middle" className="vertical-center">
+                    <Col>
+                        You are logged. Please go to <Link href="/">Home Page</Link>
+                    </Col>
+                </Row>
+            </div>
         );
     }
 

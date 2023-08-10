@@ -6,8 +6,10 @@ import {memo} from "react";
 import PrivateRoute from "../../components/PrivateRoute/PrivateRoute";
 import {ROLE_ADMIN, ROLE_INSPECTOR, ROLE_MANAGER} from "../../constants/Security";
 import User from "../User";
-import Task from "../Task";
 import Report from "../Report";
+import AdminTask from "../Task/admin";
+import ManagerTask from "../Task/manager";
+import Inspector from "../Inspector";
 
 function MainApp() {
     const match = useResolvedPath("");
@@ -34,15 +36,24 @@ function MainApp() {
                 path="inspector"
                 element={
                     <PrivateRoute roles={[ROLE_MANAGER]}>
-                        <User />
+                        <Inspector />
                     </PrivateRoute>
                 }
             />
             <Route
-                path="task"
+                path="admin/task"
                 element={
-                    <PrivateRoute roles={[ROLE_MANAGER, ROLE_ADMIN]}>
-                        <Task />
+                    <PrivateRoute roles={[ROLE_ADMIN]}>
+                        <AdminTask />
+                    </PrivateRoute>
+                }
+            />
+
+            <Route
+                path="manager/task"
+                element={
+                    <PrivateRoute roles={[ROLE_MANAGER]}>
+                        <ManagerTask />
                     </PrivateRoute>
                 }
             />
