@@ -61,12 +61,15 @@ public class UserController {
         User user = this.userService.findById(id);
 
         user.setEmail(userRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());
         user.setPhone(userRequest.getPhone());
         user.setLocation(userRequest.getLocation());
         user.setAuthorities(String.join(",", userRequest.getAuthorities()));
+
+        if (userRequest.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        }
 
         this.userService.save(user);
 
