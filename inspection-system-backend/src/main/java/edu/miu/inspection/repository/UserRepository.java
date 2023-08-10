@@ -14,6 +14,7 @@ import java.util.List;
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
     User findByEmailAndDeletedFalse(String email);
+    User findByIdAndDeletedFalse(Long id);
     User save(User user);
 
     @Query("SELECT e FROM User e WHERE e.deleted = false")

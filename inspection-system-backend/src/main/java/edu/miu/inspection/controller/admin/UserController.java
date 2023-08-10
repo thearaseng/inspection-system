@@ -9,6 +9,7 @@ import edu.miu.inspection.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,6 +49,35 @@ public class UserController {
         user.setAuthorities(String.join(",", userRequest.getAuthorities()));
         user.setEnabled(true);
         user.setDeleted(false);
+
+        this.userService.save(user);
+
+        return ResponseEntity.ok(new UserResponse(user));
+    }
+
+    @PutMapping("/api/admin/users/{id}")
+    public ResponseEntity<UserResponse> update(@PathVariable("id") Long id, @RequestBody CreateUserRequest userRequest) {
+
+        User user = this.userService.findById(id);
+
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setPhone(userRequest.getPhone());
+        user.setLocation(userRequest.getLocation());
+        user.setAuthorities(String.join(",", userRequest.getAuthorities()));
+
+        this.userService.save(user);
+
+        return ResponseEntity.ok(new UserResponse(user));
+    }
+
+    @DeleteMapping("/api/admin/users/{id}")
+    public ResponseEntity<UserResponse> delete(@PathVariable Long id) {
+
+        User user = this.userService.findById(id);
+        user.setDeleted(true);
 
         this.userService.save(user);
 
