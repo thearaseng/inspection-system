@@ -39,12 +39,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return this.userRepository.findByEmailAndDeletedFalse(email);
+        User user = this.userRepository.findByEmailAndDeletedFalse(email);
+
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("No user found with email '%s'", email));
+        }
+
+        return user;
     }
 
     @Override
     public User findById(Long id) {
-        return this.userRepository.findById(id).orElse(null);
+        User user = this.userRepository.findByIdAndDeletedFalse(id);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("No user found with id '%s'", id));
+        }
+        return user;
     }
 
     @Override
@@ -61,6 +71,7 @@ public class UserServiceImpl implements UserService {
     public Page<User> getAvailableInspectorsNotHiredByManager(Long managerId, List<Long> inspectorIds, Pageable pageable) {
         return userRepository.findAvailableInspectorsNotHiredByManager(managerId, inspectorIds, pageable);
     }
+
 
     @Override
     public Page<User> getInspectorsHiredByManager(Long managerId, List<Long> inspectorIds, Pageable pageable) {

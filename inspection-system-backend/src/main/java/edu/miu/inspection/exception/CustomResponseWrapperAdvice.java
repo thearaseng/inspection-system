@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,6 +55,16 @@ public class CustomResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
         customResponse.setStatusCode(ex.getStatus().value());
         customResponse.setMessage(ex.getStatus().getReasonPhrase());
         return ResponseEntity.status(ex.getStatus()).body(customResponse);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<CustomResponse> handleUsernameNotFoundException(UsernameNotFoundException ex) {
+        CustomResponse<Object> customResponse = new CustomResponse<>();
+        customResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+        customResponse.setMessage(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(customResponse);
     }
 
     @ExceptionHandler(Exception.class)
