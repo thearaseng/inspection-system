@@ -28,8 +28,10 @@ public class ManagerTaskController {
         User manager = userService.getCurrentUser();
 
         Task task = new Task();
+        task.setTitle(taskRequest.getTitle());
         task.setInspector(inspector);
         task.setFormType(taskRequest.getFormType());
+        task.setLocation(taskRequest.getLocation());
         task.setStatus(TaskStatus.CREATED.getValue());
         task.setDueDate(taskRequest.getDueDate());
         task.setManager(manager);

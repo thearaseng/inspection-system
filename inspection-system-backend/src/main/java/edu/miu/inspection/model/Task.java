@@ -20,6 +20,9 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    private String title;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_to")
     private User inspector;
@@ -27,6 +30,9 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "form_id")
     private Form form;
+
+    @NotNull
+    private String location;
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
