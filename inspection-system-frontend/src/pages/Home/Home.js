@@ -58,7 +58,7 @@ function Home() {
                 <div className="container">
                     <div className="row">
                         <div className="col-6 p-5">
-                            <div className="col-12 rounded bg-info p-5 pointer-cursor" onClick={() => navigate("/task")}>Task</div>
+                            <div className="col-12 rounded bg-info p-5 pointer-cursor" onClick={() => navigate("/inspector/task")}>Task</div>
                         </div>
                     </div>
                 </div>

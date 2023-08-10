@@ -10,6 +10,7 @@ import Report from "../Report";
 import AdminTask from "../Task/admin";
 import ManagerTask from "../Task/manager";
 import Inspector from "../Inspector";
+import InspectorTask from "../Task/inpsector";
 
 function MainApp() {
     const match = useResolvedPath("");
@@ -54,6 +55,15 @@ function MainApp() {
                 element={
                     <PrivateRoute roles={[ROLE_MANAGER]}>
                         <ManagerTask />
+                    </PrivateRoute>
+                }
+            />
+
+            <Route
+                path="inspector/task"
+                element={
+                    <PrivateRoute roles={[ROLE_INSPECTOR]}>
+                        <InspectorTask />
                     </PrivateRoute>
                 }
             />

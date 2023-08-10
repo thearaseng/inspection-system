@@ -194,3 +194,74 @@ export const fireInspector = (
             });
     };
 };
+
+export const deleteUser = (
+    id,
+    callback = (code, response) => {}
+) => {
+    // console.log(page, page_size);
+    return (dispatch) => {
+        dispatch({ type: FETCH_START });
+        const token = Cookies.get("token");
+        dispatch({type: FETCH_START});
+        api
+            .delete(
+                `api/admin/users/${id}`,
+                {
+                    headers:  {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+            .then((res) => {
+                if (res.status === 200) {
+                    callback(res.status, res.data.data);
+                } else callback(404);
+            })
+            .catch(function (error) {
+                dispatch({type: FETCH_ERROR, payload: error});
+                console.log("Error****:", error);
+                callback(404);
+            });
+    };
+};
+
+export const editUser = (
+    {domainInfo, id},
+    callback = (res) => {
+    }
+) => {
+    return (dispatch) => {
+        console.log("domain: "+domainInfo);
+        const token = Cookies.get("token");
+        dispatch({type: FETCH_START});
+        api
+            .put(
+                `api/admin/users/${id}`,
+                {
+                    email: domainInfo[0].value,
+                    firstName: domainInfo[1].value,
+                    lastName: domainInfo[2].value,
+                    password: domainInfo[3].value,
+                    authorities: domainInfo[6].value,
+                    phone: domainInfo[5].value,
+                    location: domainInfo[7].value,
+                },{headers:  {
+                        Authorization: `Bearer ${token}`,
+                    },}
+            )
+            .then((res) => {
+                dispatch({type: FETCH_SUCCESS});
+                console.log(res);
+                if (res.status === 200) {
+                    callback(res.status);
+                } else {
+                    callback(res.status);
+                }
+            })
+            .catch(function (error) {
+                dispatch({type: FETCH_ERROR, payload: error});
+                console.log("Error****:", error);
+                callback(404);
+            });
+    };
+};
