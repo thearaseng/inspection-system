@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {Button, Col, Form, message, Modal, Row, Space, Table, Tag} from "antd";
+import {Button, Col, Form, message, Modal, Row, Space, Table} from "antd";
 import Header from "../../components/Header/Header";
-import CreateUser from "./components/CreateUser";
 import {PlusCircleOutlined} from "@ant-design/icons";
 import {connect} from "react-redux";
-import {getUsers} from "../../services/User";
+import {fireInspector, getHireInspector} from "../../services/User";
+import CreateInspector from "./components/CreateInspector";
 
 const mapStateToProps = () => ({});
 const confirm = Modal.confirm;
-const User = (props)=> {
+const Inspector = (props)=> {
     const [isAdd, setIsAdd] = useState(false);
     const [submitAdd, setSubmitAdd] = useState(false);
     const [addForm] = Form.useForm();
@@ -19,12 +19,6 @@ const User = (props)=> {
             pageSize: 5,
         },
     });
-
-    const statusColors = {
-        ROLE_MANAGER: 'blue',
-        ROLE_INSPECTOR: 'green',
-        ROLE_ADMIN: 'purple',
-    };
 
     const columns = [
         {
@@ -52,20 +46,6 @@ const User = (props)=> {
             dataIndex: "phone",
             key: "phone",
         },
-        {
-            title: "Roles",
-            dataIndex: "roles",
-            key: "roles",
-            render: (_, { roles }) => (
-                <>
-                    {roles.map((role) => {
-                        return <Tag key={role} color={statusColors[role]}>
-                            {role}
-                        </Tag>
-                    })}
-                </>
-            ),
-        },
 
         {
             title: "Actions",
@@ -73,9 +53,6 @@ const User = (props)=> {
             render: (text, record) => (
                 <Space
                     size="large"
-                    onClick={() =>{}
-                        // setSelectedObj(record)
-                    }
                 >
                     <Space size="large" style={{ alignItems: "center" }}>
               <span className="gx-link" onClick={() => confirmDelete(record)}>
@@ -85,23 +62,10 @@ const User = (props)=> {
                         height: "35px",
                         margin: "auto",
                     }}
-                    type = "danger"
+                    type={"primary"}
+                   danger
                 >
-                  Delete
-                </Button>
-              </span>
-                    </Space>
-                    <Space size="large" style={{ alignItems: "center" }}>
-              <span className="gx-link" onClick={() => {}}>
-                <Button
-                    style={{
-                        width: "80px",
-                        height: "35px",
-                        margin: "auto",
-                    }}
-                    type = "primary"
-                >
-                  Edit
+                  Fire
                 </Button>
               </span>
                     </Space>
@@ -111,15 +75,16 @@ const User = (props)=> {
     ];
 
     const onClose = () => {
-        if (submitAdd === true) {
+
+        if (submitAdd) {
             fetchUsers();
         }
-        addForm.resetFields();
         setSubmitAdd(false);
         setIsAdd(false);
+        addForm.resetFields();
     };
 
-    const fetchUsers = () =>  props.getUsers(
+    const fetchUsers = () =>  props.getHireInspector(
         { page: tableParams.pagination.current - 1, pageSize: tableParams.pagination.pageSize },
         (code, res) => handleResult(code, res)
     );
@@ -163,14 +128,14 @@ const User = (props)=> {
             title: "Do you want to delete this user ?",
             content: "If you agree, please click OK ",
             onOk() {
-                // props.deleteDepartment(record._id, (code) => {
-                //     if (code === 200) {
-                //         setIsFetch(true);
-                //         onClose();
-                //         message.success("Delete App Successfully !");
-                //     } else message.error("Error when deleting app !");
-                // });
-                onClose();
+                props.fireInspector(record.id, (code) => {
+                    if (code === 200) {
+                        message.success("Delete App Successfully !").then(r => fetchUsers());
+
+                    } else {
+                        message.error("Error when deleting app !").then(r => onClose());
+                    }
+                });
             },
             onCancel() {
                 console.log("Cancel");
@@ -201,7 +166,7 @@ const User = (props)=> {
                             className="gx-font-weight-semi-bold gx-mb-3"
                             style={{ color: "#274679" }}
                         >
-                            User
+                            Inspector
                         </h4>
                     </Col>
                     <Col
@@ -220,7 +185,7 @@ const User = (props)=> {
                             style={{ display: 'flex', alignItems: 'center', margin: '20px'}}
                             onClick={() => setIsAdd(true)}
                         >
-                            Add
+                            Hire Inspector
                         </Button>
 
                     </Col>
@@ -267,14 +232,14 @@ const User = (props)=> {
                     {isAdd && (
                         <Modal
                             maskClosable={false}
-                            title="Add new user"
+                            title="Hire new inspector"
                             width={720}
                             wrapClassName="vertical-center-modal"
                             open={isAdd}
                             onOk={() => handleOk()}
                             onCancel={() => setIsAdd(false)}
                         >
-                            <CreateUser
+                            <CreateInspector
                                 submitAdd={submitAdd}
                                 onClose={onClose}
                                 form={addForm}
@@ -290,5 +255,6 @@ const User = (props)=> {
 }
 
 export default connect(mapStateToProps, {
-    getUsers
-})(User);
+    getHireInspector,
+    fireInspector
+})(Inspector);
