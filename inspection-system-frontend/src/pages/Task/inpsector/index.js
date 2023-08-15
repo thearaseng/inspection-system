@@ -3,14 +3,20 @@ import {Button, Col, Form, message, Modal, Row, Space, Table, Tag} from "antd";
 import Header from "../../../components/Header/Header";
 import {connect} from "react-redux";
 import {getTaskByInspector} from "../../../services/Task";
-import CreateForm from "./components/CreateForm";
+import HotelForm from "./components/HotelForm";
+import RestaurantForm from "./components/RestaurantForm";
+import ViewRestaurantForm from "../ViewRestaurantForm";
+import ViewHotelForm from "../ViewHotelForm";
 
 const mapStateToProps = () => ({});
-const InspectorTask = (props)=> {
+const InspectorTask = (props) => {
     const [dataSource, setDataSource] = useState([]);
     const [doingTask, setDoingTask] = useState(false);
     const [submitAdd, setSubmitAdd] = useState(false);
+    const [submitView, setSubmitView] = useState(false);
+    const [isSubmit, setIsSubmit] = useState(false);
     const [addForm] = Form.useForm();
+    const [selectedObj, setSelectedObj] = useState({});
     const [tableParams, setTableParams] = useState({
         pagination: {
             current: 1,
@@ -34,7 +40,7 @@ const InspectorTask = (props)=> {
             title: "Manager",
             dataIndex: "manager",
             key: "manager",
-            render: (_, { manager }) => {
+            render: (_, {manager}) => {
                 return (<div>
                     {manager.firstName} {manager.lastName}
                 </div>)
@@ -60,8 +66,8 @@ const InspectorTask = (props)=> {
             title: "Due Date",
             dataIndex: "dueDate",
             key: "dueDate",
-            render: (_, { dueDate }) => {
-                let date = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit'})
+            render: (_, {dueDate}) => {
+                let date = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'})
                     .format(dueDate * 1000);
                 return (<div>
                     {date}
@@ -73,7 +79,7 @@ const InspectorTask = (props)=> {
             title: "Status",
             dataIndex: "status",
             key: "status",
-            render: (_, { status }) => (
+            render: (_, {status}) => (
                 <Tag key={status} color={statusColors[status]}>
                     {status}
                 </Tag>
@@ -83,30 +89,51 @@ const InspectorTask = (props)=> {
             title: "Actions",
             key: "action",
             render: (text, record) => (
-                <Space
-                    size="large"
-                    onClick={() =>{}
-                        // setSelectedObj(record)
-                    }
-                >
-                    <Space size="large" style={{ alignItems: "center" }}>
-              <span className="gx-link" onClick={() => setDoingTask(true)}>
-                <Button
-                    type = "primary"
-                >
-                  Start Task
-                </Button>
-              </span>
-                    </Space>
+                <Space size="large" style={{alignItems: "center"}}>
+                    {record.status !== "DONE" ? (
+                        <span className="gx-link" onClick={() => {
+                            setSelectedObj(record);
+                            setDoingTask(true);
+                        }}>
+                    <Button
+                        type="primary"
+                    >
+                        Start Task
+                    </Button>
+                </span>
+                    ) : (
+                        <span className="gx-link" onClick={() => {
+                            setSelectedObj(record);
+                            setSubmitView(true);
+                        }}>
+                    <Button
+                        type="primary"
+                    >
+                        View Task
+                    </Button>
+                </span>
+                    )}
                 </Space>
             ),
         },
     ];
 
-    const handleOk = async () => {
+    const handleSave = async () => {
         try {
             await addForm.validateFields(); // Validate form fields
             // All fields are valid, so you can proceed with submitting
+            setIsSubmit(false)
+            setSubmitAdd(true);
+        } catch (error) {
+            // Validation failed
+        }
+    };
+
+    const handleSubmit = async () => {
+        try {
+            await addForm.validateFields(); // Validate form fields
+            // All fields are valid, so you can proceed with submitting
+            setIsSubmit(true)
             setSubmitAdd(true);
         } catch (error) {
             // Validation failed
@@ -121,12 +148,12 @@ const InspectorTask = (props)=> {
         // setSubmitUpdate(false);
         setDoingTask(false);
         addForm.resetFields();
-        // setIsEdit(false);
+        setSubmitView(false);
     };
 
     const fetchData = () => {
         props.getTaskByInspector(
-            { page: tableParams.pagination.current - 1, pageSize: tableParams.pagination.pageSize },
+            {page: tableParams.pagination.current - 1, pageSize: tableParams.pagination.pageSize},
             (code, res) => handleResult(code, res)
         );
         const handleResult = (code, res) => {
@@ -172,12 +199,12 @@ const InspectorTask = (props)=> {
             <div>
                 <Row
                     // justify="space-between"
-                    style={{ margin: "15px" }}
+                    style={{margin: "15px"}}
                 >
                     <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
                         <h4
                             className="gx-font-weight-semi-bold gx-mb-3"
-                            style={{ color: "#274679" }}
+                            style={{color: "#274679"}}
                         >
                             Task
                         </h4>
@@ -221,23 +248,71 @@ const InspectorTask = (props)=> {
                         }}
                     />
 
-                    <br />
+                    <br/>
 
                     {doingTask && (
                         <Modal
                             maskClosable={false}
-                            title="Inspection Form"
+                            title="Hotel Form"
                             width={1080}
                             wrapClassName="vertical-center-modal"
                             open={doingTask}
-                            onOk={() => handleOk()}
                             onCancel={() => setDoingTask(false)}
+                            footer={[
+                                <Button key="back" onClick={() => setDoingTask(false)}>
+                                    Cancel
+                                </Button>,
+                                <Button key="save" type="primary" onClick={handleSave}>
+                                    Save
+                                </Button>,
+                                <Button
+                                    key="submit"
+                                    type="primary"
+                                    onClick={handleSubmit}
+                                >
+                                    Submit
+                                </Button>,
+                            ]}
                         >
-                            <CreateForm
+                            {selectedObj.formType === "RESTAURANT" && (<RestaurantForm
+                                selectedObj={selectedObj}
                                 submitAdd={submitAdd}
+                                isSubmit={isSubmit}
                                 onClose={onClose}
                                 form={addForm}
-                            />
+                            />)}
+
+                            {selectedObj.formType === "HOTEL" && (<HotelForm
+                                selectedObj={selectedObj}
+                                submitAdd={submitAdd}
+                                isSubmit={isSubmit}
+                                onClose={onClose}
+                                form={addForm}
+                            />)}
+                        </Modal>
+                    )}
+
+                    {submitView && (
+                        <Modal
+                            maskClosable={false}
+                            title="Hotel Form"
+                            width={1080}
+                            wrapClassName="vertical-center-modal"
+                            open={submitView}
+                            onCancel={() => setSubmitView(false)}
+                            footer={[
+                                <Button key="back" onClick={() => setSubmitView(false)}>
+                                    Cancel
+                                </Button>,
+                            ]}
+                        >
+                            {selectedObj.formType === "RESTAURANT" && (<ViewRestaurantForm
+                                selectedObj={selectedObj}
+                            />)}
+
+                            {selectedObj.formType === "HOTEL" && (<ViewHotelForm
+                                selectedObj={selectedObj}
+                            />)}
                         </Modal>
                     )}
                 </div>

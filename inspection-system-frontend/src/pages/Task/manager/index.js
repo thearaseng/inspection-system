@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {Button, Col, Form, message, Modal, Row, Table, Tag} from "antd";
+import {Button, Col, Form, message, Modal, Row, Space, Table, Tag} from "antd";
 import Header from "../../../components/Header/Header";
 import {connect} from "react-redux";
 import {getTasksByManager} from "../../../services/Task";
 import {PlusCircleOutlined} from "@ant-design/icons";
 import CreateTask from "./components/CreateTask";
+import ViewRestaurantForm from "../ViewRestaurantForm";
+import ViewHotelForm from "../ViewHotelForm";
 
 const mapStateToProps = () => ({});
 const ManagerTask = (props)=> {
@@ -12,6 +14,8 @@ const ManagerTask = (props)=> {
     const [submitAdd, setSubmitAdd] = useState(false);
     const [addForm] = Form.useForm();
     const [dataSource, setDataSource] = useState([]);
+    const [submitView, setSubmitView] = useState(false);
+    const [selectedObj, setSelectedObj] = useState({});
     const [tableParams, setTableParams] = useState({
         pagination: {
             current: 1,
@@ -77,6 +81,31 @@ const ManagerTask = (props)=> {
                 <Tag key={status} color={statusColors[status]}>
                     {status}
                 </Tag>
+            ),
+        },
+        {
+            title: "Actions",
+            key: "action",
+            render: (text, record) => (
+                <Space
+                    size="large"
+                    onClick={() =>{}
+                        // setSelectedObj(record)
+                    }
+                >
+                    <Space size="large" style={{ alignItems: "center" }}>
+              <span className="gx-link" onClick={() => {
+                  setSelectedObj(record);
+                  setSubmitView(true);
+              } }>
+                <Button
+                    type = "primary"
+                >
+                  View Task
+                </Button>
+              </span>
+                    </Space>
+                </Space>
             ),
         },
     ];
@@ -225,6 +254,30 @@ const ManagerTask = (props)=> {
                                 onClose={onClose}
                                 form={addForm}
                             />
+                        </Modal>
+                    )}
+
+                    {submitView && (
+                        <Modal
+                            maskClosable={false}
+                            title="Hotel Form"
+                            width={1080}
+                            wrapClassName="vertical-center-modal"
+                            open={submitView}
+                            onCancel={() => setSubmitView(false)}
+                            footer={[
+                                <Button key="back" onClick={() => setSubmitView(false)}>
+                                    Cancel
+                                </Button>,
+                            ]}
+                        >
+                            {selectedObj.formType === "RESTAURANT" && (<ViewRestaurantForm
+                                selectedObj={selectedObj}
+                            />)}
+
+                            {selectedObj.formType === "HOTEL" && (<ViewHotelForm
+                                selectedObj={selectedObj}
+                            />)}
                         </Modal>
                     )}
                 </div>

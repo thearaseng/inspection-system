@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {Col, message, Row, Table, Tag} from "antd";
+import {Button, Col, message, Modal, Row, Space, Table, Tag} from "antd";
 import Header from "../../../components/Header/Header";
 import {connect} from "react-redux";
 import {getTasks} from "../../../services/Task";
+import ViewRestaurantForm from "../ViewRestaurantForm";
+import ViewHotelForm from "../ViewHotelForm";
 
 const mapStateToProps = () => ({});
 const AdminTask = (props)=> {
@@ -13,6 +15,8 @@ const AdminTask = (props)=> {
             pageSize: 5,
         },
     });
+    const [selectedObj, setSelectedObj] = useState({});
+    const [submitView, setSubmitView] = useState(false);
 
     const statusColors = {
         CREATED: 'blue',
@@ -77,6 +81,31 @@ const AdminTask = (props)=> {
                 <Tag key={status} color={statusColors[status]}>
                     {status}
                 </Tag>
+            ),
+        },
+        {
+            title: "Actions",
+            key: "action",
+            render: (text, record) => (
+                <Space
+                    size="large"
+                    onClick={() =>{}
+                        // setSelectedObj(record)
+                    }
+                >
+                    <Space size="large" style={{ alignItems: "center" }}>
+              <span className="gx-link" onClick={() => {
+                  setSelectedObj(record);
+                  setSubmitView(true);
+              } }>
+                <Button
+                    type = "primary"
+                >
+                  View Task
+                </Button>
+              </span>
+                    </Space>
+                </Space>
             ),
         },
     ];
@@ -178,6 +207,30 @@ const AdminTask = (props)=> {
                         }}
                     />
                 </div>
+
+                {submitView && (
+                    <Modal
+                        maskClosable={false}
+                        title="Hotel Form"
+                        width={1080}
+                        wrapClassName="vertical-center-modal"
+                        open={submitView}
+                        onCancel={() => setSubmitView(false)}
+                        footer={[
+                            <Button key="back" onClick={() => setSubmitView(false)}>
+                                Cancel
+                            </Button>,
+                        ]}
+                    >
+                        {selectedObj.formType === "RESTAURANT" && (<ViewRestaurantForm
+                            selectedObj={selectedObj}
+                        />)}
+
+                        {selectedObj.formType === "HOTEL" && (<ViewHotelForm
+                            selectedObj={selectedObj}
+                        />)}
+                    </Modal>
+                )}
             </div>
 
 

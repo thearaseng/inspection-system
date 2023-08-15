@@ -1,9 +1,15 @@
 import React from "react";
-import {Divider, Row} from "antd";
-import {Link} from "react-router-dom";
+import {Col, Row} from "antd";
+import {Link, useNavigate} from "react-router-dom";
 
 export default function AccessDenied() {
-    return <Row>
-        <Divider>You are not allowed to access this link. Please go to  <Link href="/">HomePage</Link></Divider>
-    </Row>;
+    useNavigate();
+    return <div className="center-container">
+        <Row justify="center" align="middle" className="vertical-center" style={{ display: "flex" }}>
+            <Col>
+                You are logged. Please go to <Link to={"/"}>Home Page</Link>
+            </Col>
+        </Row>
+
+    </div>
 }
