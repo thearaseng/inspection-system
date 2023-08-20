@@ -21,18 +21,11 @@ resource "aws_instance" "web" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.web-sg.id]
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo yum update -y",
-      "sudo yum install docker",
-      "wget https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)",
-      "sudo mv docker-compose-$(uname -s)-$(uname -m) /usr/libexec/docker/cli-plugins/docker-compose",
-      "chmod +x /usr/libexec/docker/cli-plugins/docker-compose",
-      "sudo systemctl enable docker",
-      "sudo usermod -a -G docker ec2-user",
-      "sudo systemctl start docker"
-    ]
-  }
+  user_data = <<EOF
+    #!/bin/bash
+    sudo yum update -y
+    sudo yum install docker
+  EOF
 
 }
 
