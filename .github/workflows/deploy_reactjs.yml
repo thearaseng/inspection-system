@@ -1,33 +1,33 @@
-name: Deploy React JS to EC2
-on:
-  push:
-    branches:
-      - main
-jobs:
-  build-test-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build and Push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./inspection-system-frontend
-          push: true
-          tags: thearaseng/inspection-system-frontend:${{ github.sha }}
-      - name: Deploy to EC2 instance
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: |
-            docker stop inspection-system-frontend || true
-            docker rm inspection-system-frontend || true
-            docker pull thearaseng/inspection-system-frontend:${{ github.sha }}
-            docker run -d --name inspection-system-frontend -p 3000:80 thearaseng/inspection-system-frontend:${{ github.sha }}
+# name: Deploy React JS to EC2
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   build-test-deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+#       - name: Login to Docker Hub
+#         uses: docker/login-action@v1
+#         with:
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWORD }}
+#       - name: Build and Push Docker image
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: ./inspection-system-frontend
+#           push: true
+#           tags: thearaseng/inspection-system-frontend:${{ github.sha }}
+#       - name: Deploy to EC2 instance
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.EC2_HOST }}
+#           username: ${{ secrets.EC2_USERNAME }}
+#           key: ${{ secrets.EC2_PRIVATE_KEY }}
+#           script: |
+#             docker stop inspection-system-frontend || true
+#             docker rm inspection-system-frontend || true
+#             docker pull thearaseng/inspection-system-frontend:${{ github.sha }}
+#             docker run -d --name inspection-system-frontend -p 3000:80 thearaseng/inspection-system-frontend:${{ github.sha }}
